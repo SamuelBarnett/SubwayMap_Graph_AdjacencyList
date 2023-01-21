@@ -137,7 +137,7 @@ namespace LondonGraph
             }
         }
         /// <summary>
-        /// Inserts an edge that connects to two vertexes in an undirected graph.
+        /// Removes an edge that connects to two vertexes in an undirected graph.
         /// </summary>
         /// <param name="name1"> string: the first name of the station(vertex) </param>
         /// <param name="name2"> string: the second name of the station(vertex) </param>
@@ -145,7 +145,7 @@ namespace LondonGraph
         /// <returns> true or false <returns>
         public bool RemoveConnection(string name1, string name2, Colour c) { }
         /// <summary>
-        /// Inserts an edge that connects to two vertexes in an undirected graph.
+        /// Finds the shortest path between two vertexes in a graph using breath-first
         /// </summary>
         /// <param name="name1"> string: the first name of the station(vertex) </param>
         /// <param name="name2"> string: the second name of the station(vertex) </param>
