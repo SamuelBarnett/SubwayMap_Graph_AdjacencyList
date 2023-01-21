@@ -38,16 +38,31 @@ namespace LondonGraph
             public Station(string name)
             {
                 Station.name = name;
+                Station.E = new Node();
+                Station.visited = false;
             }
         }
         private Dictionary<string, Station> S; // Dictionary of stations
         // Adjacency list.
-        public SubwayMap() { }
-        public void InsertStation(string name) { }
+        public SubwayMap()
+        {
+            S = new Dictionary<string, Station>();
+        }
+        public void InsertStation(string name)
+        {
+            if (!S.ContainsKey(name))
+            {
+                Station addStation = new Station();
+                S.Add(name, addStation);
+            }
+        }
         public bool RemoveStation(string name) { }
         public bool InsertConnection(string name1, string name2, Colour c)
         {
             // undirected meaning you must connect A to B and B to A.
+            // A to B
+            
+            // B to A
         }
         public bool RemoveConnection(string name1, string name2, Colour c) { }
         public void ShortestRoute(string name1, string name2) { }
