@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace LondonGraph
 {
+    // Copy and paste this for comments:
+    // <summary>
+    // 
+    // </summary>
+    // <param name=""> </param>
+    // <returns> <returns>
     public enum Colour { RED, YELLOW, GREEN, BLUE, NONE } // For example
     public class SubwayMap
     {
@@ -48,6 +54,11 @@ namespace LondonGraph
         {
             S = new Dictionary<string, Station>();
         }
+        // <summary>
+        // Inserts a station(vertex) into the adjacency dictionary for the graph.
+        // </summary>
+        // <param> string: the name of the station(vertex) </param>
+        // <returns> void <returns>
         public void InsertStation(string name)
         {
             if (!S.ContainsKey(name))
@@ -60,9 +71,22 @@ namespace LondonGraph
                 Console.WriteLine("Station with the same name already exists");
             }
         }
+        // <summary>
+        // Inserts a station(vertex) into the adjacency dictionary for the graph.
+        // </summary>
+        // <param name="name"> string: the name of the station(vertex) </param>
+        // <returns> true or false <returns>
         public bool RemoveStation(string name)
         {
         }
+
+        // <summary>
+        // Inserts an edge that connects to two vertexes in an undirected graph.
+        // </summary>
+        // <param name="name1"> string: the first name of the station(vertex) </param>
+        // <param name="name2"> string: the second name of the station(vertex) </param>
+        // <param name="c"> value representing the color of the edge </param>
+        // <returns> true or false <returns>
         public bool InsertConnection(string name1, string name2, Colour c)
         {
             {
@@ -112,7 +136,20 @@ namespace LondonGraph
                 return false;
             }
         }
+        // <summary>
+        // Inserts an edge that connects to two vertexes in an undirected graph.
+        // </summary>
+        // <param name="name1"> string: the first name of the station(vertex) </param>
+        // <param name="name2"> string: the second name of the station(vertex) </param>
+        // <param name="c"> value representing the color of the edge </param>
+        // <returns> true or false <returns>
         public bool RemoveConnection(string name1, string name2, Colour c) { }
+        // <summary>
+        // Inserts an edge that connects to two vertexes in an undirected graph.
+        // </summary>
+        // <param name="name1"> string: the first name of the station(vertex) </param>
+        // <param name="name2"> string: the second name of the station(vertex) </param>
+        // <returns> void <returns>
         public void ShortestRoute(string name1, string name2) { }
     }
 }
