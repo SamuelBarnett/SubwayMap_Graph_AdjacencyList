@@ -74,28 +74,47 @@ namespace LondonGraph
                     temp = S[name1];
                     while (temp.E.next != null)
                     {
-                        if (temp.E.next.connection == name2)
+                        if (temp.E.next.connection.Equals(name2))
                         {
                             return false;
                         }
                     }
                     // B to A
+                    // checks the 2nd vertex(station) for matching
                     temp = S[name2];
                     while (temp.E.next != null)
                     {
-                        if (temp.E.next.connection == name2)
+                        if (temp.E.next.connection.Equals(name1))
                         {
                             return false;
                         }
                     }
+
+                    // move both linked lists move down by one.---
+                    // Enter new node for vertex 1
+                    while (S[name1].E.next != null)
+                    {
+                        S[name1].E = S[name1].E.next;
+                    }
+                    // Puts a new node in the first position in the first vertex(station)
+                    S[name1].E = new Node(S[name2], c, S[name1].E.next);
+
+                    // Enter new node for vertex 2
+                    while (S[name2].E.next != null)
+                    {
+                        S[name2].E = S[name2].E.next;
+                    }
+                    // Puts a new node in the first position in the second vertex(station)
+                    S[name2].E = new Node(S[name1], c, S[name2].E.next);
+                    // -------------------------------------------
                     return true;
                 }
+                return false;
             }
         }
         public bool RemoveConnection(string name1, string name2, Colour c) { }
         public void ShortestRoute(string name1, string name2) { }
     }
 }
-
 
 
