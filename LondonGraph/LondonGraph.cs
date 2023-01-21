@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LondonGraph
 {
-    public enum Colour { RED, YELLOW, GREEN, BLUE } // For example
+    public enum Colour { RED, YELLOW, GREEN, BLUE , NONE } // For example
     public class SubwayMap
     {
         private class Node
@@ -17,16 +17,16 @@ namespace LondonGraph
             public Node next; // Link to the next adjacent station (Node)
             public Node()
             {
-                Node.next = null;
-                Node.connection = null;
-                Node.line = null;
+                next = null;
+                connection = null;
+                line = Colour.NONE;
             }
             // maybe switch the properies to have {get; set;} and use that value instead.
             public Node(Station connection, Colour c, Node next)
             {
-                Node.next = next;
-                Node.connection = connection;
-                Node.line = c;
+                this.connection = connection;
+                this.next = next;
+                this.line = c;
             }
         }
         // vertex
@@ -37,9 +37,9 @@ namespace LondonGraph
             public Node E; // Header node for a linked list of adjacent stations
             public Station(string name)
             {
-                Station.name = name;
-                Station.E = new Node();
-                Station.visited = false;
+                this.name = name;
+                this.E = new Node();
+                this.visited = false;
             }
         }
         private Dictionary<string, Station> S; // Dictionary of stations
@@ -52,21 +52,28 @@ namespace LondonGraph
         {
             if (!S.ContainsKey(name))
             {
-                Station addStation = new Station();
+                Station addStation = new Station(name);
                 S.Add(name, addStation);
             }
+            else
+            {
+                Console.WriteLine("Station with the same name already exists");
+            }
         }
-        public bool RemoveStation(string name) { }
+        public bool RemoveStation(string name)
+        {
+        }
         public bool InsertConnection(string name1, string name2, Colour c)
         {
             // undirected meaning you must connect A to B and B to A.
             // A to B
-            
+
             // B to A
         }
         public bool RemoveConnection(string name1, string name2, Colour c) { }
         public void ShortestRoute(string name1, string name2) { }
     }
 }
+
 
 
