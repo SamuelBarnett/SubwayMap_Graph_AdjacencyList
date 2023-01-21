@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LondonGraph
 {
-    public enum Colour { RED, YELLOW, GREEN, BLUE , NONE } // For example
+    public enum Colour { RED, YELLOW, GREEN, BLUE, NONE } // For example
     public class SubwayMap
     {
         private class Node
@@ -65,10 +65,32 @@ namespace LondonGraph
         }
         public bool InsertConnection(string name1, string name2, Colour c)
         {
-            // undirected meaning you must connect A to B and B to A.
-            // A to B
-
-            // B to A
+            {
+                Station temp;
+                // undirected meaning you must connect A to B and B to A.
+                // A to B
+                if (S.ContainsKey(name1) && S.ContainsKey(name2))
+                {
+                    temp = S[name1];
+                    while (temp.E.next != null)
+                    {
+                        if (temp.E.next.connection == name2)
+                        {
+                            return false;
+                        }
+                    }
+                    // B to A
+                    temp = S[name2];
+                    while (temp.E.next != null)
+                    {
+                        if (temp.E.next.connection == name2)
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }
         }
         public bool RemoveConnection(string name1, string name2, Colour c) { }
         public void ShortestRoute(string name1, string name2) { }
