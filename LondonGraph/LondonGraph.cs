@@ -23,9 +23,9 @@ namespace LondonGraph
             public Node next; // Link to the next adjacent station (Node)
             public Node()
             {
-                next = null;
-                connection = null;
-                line = Colour.NONE;
+                this.next = null;
+                this.connection = null;
+                this.line = Colour.NONE;
             }
             // maybe switch the properies to have {get; set;} and use that value instead.
             public Node(Station connection, Colour c, Node next)
@@ -57,7 +57,7 @@ namespace LondonGraph
         /// <summary>
         /// Inserts a station(vertex) into the adjacency dictionary for the graph.
         /// </summary>
-        /// <param> string: the name of the station(vertex) </param>
+        /// <param name="name"> string: the name of the station(vertex) </param>
         /// <returns> void <returns>
         public void InsertStation(string name)
         {
@@ -90,49 +90,54 @@ namespace LondonGraph
         public bool InsertConnection(string name1, string name2, Colour c)
         {
             {
-                Station temp;
-                // undirected meaning you must connect A to B and B to A.
-                // A to B
                 if (S.ContainsKey(name1) && S.ContainsKey(name2))
                 {
-                    temp = S[name1];
-                    while (temp.E.next != null)
+                    Node temp = S[name1].E;
+                    while (temp.next != null)
                     {
-                        if (temp.E.next.connection.Equals(name2))
+                        if (temp.next.connection.Equals(name2))
                         {
+                            Console.WriteLine("station exists");
                             return false;
                         }
                     }
                     // B to A
                     // checks the 2nd vertex(station) for matching
-                    temp = S[name2];
-                    while (temp.E.next != null)
+                    temp = S[name2].E;
+                    while (temp.next != null)
                     {
-                        if (temp.E.next.connection.Equals(name1))
+                        if (temp.next.connection.Equals(name1))
                         {
+                            Console.WriteLine("station exists");
                             return false;
                         }
                     }
 
-                    // move both linked lists move down by one.---
-                    // Enter new node for vertex 1
-                    while (S[name1].E.next != null)
+                    if (S[name1].E.line.Equals(Colour.NONE))
                     {
-                        S[name1].E = S[name1].E.next;
+                        Node toAdd = new Node(S[name2], c, null);
+                        S[name1].E = toAdd;
                     }
-                    // Puts a new node in the first position in the first vertex(station)
-                    S[name1].E = new Node(S[name2], c, S[name1].E.next);
+                    else
+                    {
+                        Node toAdd = new Node(S[name2], c, S[name1].E);
+                        S[name1].E = toAdd;
+                    }
 
-                    // Enter new node for vertex 2
-                    while (S[name2].E.next != null)
+                    if (S[name2].E.line.Equals(Colour.NONE))
                     {
-                        S[name2].E = S[name2].E.next;
+                        Node toAdd = new Node(S[name1], c, null);
+                        S[name2].E = toAdd;
                     }
-                    // Puts a new node in the first position in the second vertex(station)
-                    S[name2].E = new Node(S[name1], c, S[name2].E.next);
-                    // -------------------------------------------
+                    else
+                    {
+                        Node toAdd = new Node(S[name1], c, S[name2].E);
+                        S[name2].E = toAdd;
+                    }
+
                     return true;
                 }
+
                 return false;
             }
         }
@@ -151,6 +156,27 @@ namespace LondonGraph
         /// <param name="name2"> string: the second name of the station(vertex) </param>
         /// <returns> void <returns>
         public void ShortestRoute(string name1, string name2) { }
+        public void PrintStations()
+        {
+            foreach ( var station in S)
+            {
+                Console.WriteLine("name: {0}", station.Value.name);
+            }
+        }
+
+        public void PrintGraph()
+        {
+            foreach (var station in S)
+            {
+                Console.WriteLine("Station: {0}", station.Value.name);
+                Node temp = station.Value.E;
+                while (temp != null && temp.connection != null)
+                {
+                    Console.WriteLine("edges: {0}", temp.connection.name);
+                    temp = temp.next;   
+                }
+            }
+        }
     }
 }
 
