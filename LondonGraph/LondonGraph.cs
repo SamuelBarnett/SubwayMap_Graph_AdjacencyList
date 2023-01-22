@@ -79,7 +79,6 @@ namespace LondonGraph
         public bool RemoveStation(string name)
         {
         }
-
         /// <summary>
         /// Inserts an edge that connects to two vertexes in an undirected graph.
         /// </summary>
@@ -95,22 +94,24 @@ namespace LondonGraph
                     Node temp = S[name1].E;
                     while (temp.next != null)
                     {
-                        if (temp.next.connection.Equals(name2))
+                        if (temp.next.connection.Equals(S[name2]))
                         {
                             Console.WriteLine("station exists");
                             return false;
                         }
+                        temp = temp.next;
                     }
                     // B to A
                     // checks the 2nd vertex(station) for matching
                     temp = S[name2].E;
                     while (temp.next != null)
                     {
-                        if (temp.next.connection.Equals(name1))
+                        if (temp.next.connection.Equals(S[name1]))
                         {
                             Console.WriteLine("station exists");
                             return false;
                         }
+                        temp = temp.next;
                     }
 
                     if (S[name1].E.line.Equals(Colour.NONE))
@@ -123,7 +124,6 @@ namespace LondonGraph
                         Node toAdd = new Node(S[name2], c, S[name1].E);
                         S[name1].E = toAdd;
                     }
-
                     if (S[name2].E.line.Equals(Colour.NONE))
                     {
                         Node toAdd = new Node(S[name1], c, null);
@@ -137,7 +137,7 @@ namespace LondonGraph
 
                     return true;
                 }
-
+                Console.WriteLine("error");
                 return false;
             }
         }
@@ -156,14 +156,13 @@ namespace LondonGraph
         /// <param name="name2"> string: the second name of the station(vertex) </param>
         /// <returns> void <returns>
         public void ShortestRoute(string name1, string name2) { }
-        public void PrintStations()
+         public void PrintStations()
         {
             foreach ( var station in S)
             {
                 Console.WriteLine("name: {0}", station.Value.name);
             }
         }
-
         public void PrintGraph()
         {
             foreach (var station in S)
@@ -172,8 +171,8 @@ namespace LondonGraph
                 Node temp = station.Value.E;
                 while (temp != null && temp.connection != null)
                 {
-                    Console.WriteLine("edges: {0}", temp.connection.name);
-                    temp = temp.next;   
+                    Console.WriteLine("[{0}]", temp.connection.name);
+                    temp = temp.next;
                 }
             }
         }
