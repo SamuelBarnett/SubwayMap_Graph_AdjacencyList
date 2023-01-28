@@ -72,13 +72,37 @@ namespace LondonGraph
             }
         }
         /// <summary>
-        /// Inserts a station(vertex) into the adjacency dictionary for the graph.
+        /// Removes a station(vertex) in the graph.
         /// </summary>
         /// <param name="name"> string: the name of the station(vertex) </param>
         /// <returns> true or false <returns>
-        // public bool RemoveStation(string name)
-        // {
-        // }
+        // algorithm 
+
+        // remove vertex
+        // remove edges then remove vertex
+
+        // ideas: loop through stations connections and then call removeConnection() on every one
+        public bool RemoveStation(string name)
+        {
+            if (!S.ContainsKey(name))
+            {
+                Console.WriteLine("station does not exist");
+                return false;
+            }
+            // add names and colors to a list and then call remove connection
+
+            Node temp = S[name].E;
+            while (temp != null && temp.connection != null)
+            {
+                // add names and colors to a list and then call remove connection
+                RemoveConnection(name, temp.connection.name, temp.line);
+                // Console.WriteLine("[{0}]({1})", temp.connection.name, temp.line);
+                temp = temp.next;
+            }
+
+            S.Remove(name);
+            return false;
+        }
 
         /// <summary>
         /// Inserts an edge that connects to two vertexes in an undirected graph.
@@ -91,7 +115,7 @@ namespace LondonGraph
         {
             if (!(S.ContainsKey(name1) && S.ContainsKey(name2)))
             {
-                Console.WriteLine("error");
+                Console.WriteLine("One or both stations do not exist.");
                 return false;
             }
             // if there is no station of course there is going to be no other line with a different color
@@ -100,7 +124,7 @@ namespace LondonGraph
             // station 2 is empty and station 1 has stuff in it - 2
             // both stations are empty - 3
             // both stations have stuff -- only one where you would have to check colors - 4
-            // switch to case statemnt later
+            // switch to case statement later
             // 3
             if (S[name1].E.line.Equals(Colour.NONE) && S[name2].E.line.Equals(Colour.NONE))
             {
@@ -191,9 +215,9 @@ namespace LondonGraph
             bool s_1_exists = false, s_2_exists = false, s_1_colour = false, s_2_colour = false; //bool used in if statement to know whether a connection/colour exists
 
             // Checks location of nodes ========================================
-            while (temp.next != null)
+            while (temp != null)
             {
-                if (temp.next.connection.Equals(S[name2])) //checks to see if connection between stations exists, if so where, make sure colours match!!!!!
+                if (temp.connection.Equals(S[name2])) //checks to see if connection between stations exists, if so where, make sure colours match!!!!!
                 {
                     s_1_exists = true;
                     //check to see if colours match
@@ -222,7 +246,7 @@ namespace LondonGraph
                     if (temp.line.Equals(c))
                     {
                         s_2_colour = true;
-                        c_2_location = temp; //connection location for station 2              
+                        c_2_location = temp; //connection location for station 2 
                         break;
                     }
                 }
@@ -244,7 +268,7 @@ namespace LondonGraph
             //check to see if the node is found at the head
             if (S[name1].E.Equals(c_1_location))
             {
-                if (S[name1].E.next.Equals(null)) //check to see if it's the only element in the linked list
+                if (S[name1].E.next == null) //check to see if it's the only element in the linked list
                 {
                     S[name1].E = null;//set header to null
                 }
@@ -287,6 +311,7 @@ namespace LondonGraph
                 }
                 else //more than one item in the list
                 {
+                    // something here is wrong
                     //create temp node, make header equal to next node 
                     temp = S[name2].E.next;
                     S[name2].E = temp;

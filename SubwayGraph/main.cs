@@ -24,6 +24,7 @@ namespace LondonGraph
             Subway.InsertConnection("Canada", "US", Colour.YELLOW);
             // Subway.RemoveConnection("Canada", "US", Colour.BLUE);
 
+            Subway.RemoveStation("Mexico");
 
             Subway.PrintGraph();
         }
