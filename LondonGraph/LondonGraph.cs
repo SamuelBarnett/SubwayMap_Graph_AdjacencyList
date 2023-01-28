@@ -89,56 +89,50 @@ namespace LondonGraph
         /// <returns> true or false <returns>
         public bool InsertConnection(string name1, string name2, Colour c)
         {
-            if (S.ContainsKey(name1) && S.ContainsKey(name2))
+            // if both of the stations don't exist return false
+            if (!(S.ContainsKey(name1) && S.ContainsKey(name2)))
             {
-                Node temp = S[name1].E;
+                Console.WriteLine("error");
+                return false;
+            }
+            Node temp = S[name1].E;
+            if (S[name1].E.line.Equals(Colour.NONE))
+            {
+                Node toAdd = new Node(S[name2], c, null);
+                S[name1].E = toAdd;
+                toAdd = new Node(S[name1], c, null);
+                S[name2].E = toAdd;
+            }
+            else
+            {
                 while (temp.next != null)
                 {
+                    // first find the connection, then find if any other colors match
                     if (temp.next.connection.Equals(S[name2]))
                     {
-                        Console.WriteLine("station exists");
-                        return false;
+                        // temp.next == station 2
+                        // find if that connection that does exist is unique
+                        // if connection with the same color exists
+                        // loop through station 2 and check this
+                        Node temp2 = S[name2].E;
+                        while (temp2.next != null)
+                        {
+                            if (temp2.line == c)
+                            {
+                                Console.WriteLine("station exists");
+                                return false;
+                            }
+                            temp2 = temp2.next;
+                        }
                     }
                     temp = temp.next;
                 }
-                // B to A
-                // checks the 2nd vertex(station) for matching
-                temp = S[name2].E;
-                while (temp.next != null)
-                {
-                    if (temp.next.connection.Equals(S[name1]))
-                    {
-                        Console.WriteLine("station exists");
-                        return false;
-                    }
-                    temp = temp.next;
-                }
-
-                if (S[name1].E.line.Equals(Colour.NONE))
-                {
-                    Node toAdd = new Node(S[name2], c, null);
-                    S[name1].E = toAdd;
-                }
-                else
-                {
-                    Node toAdd = new Node(S[name2], c, S[name1].E);
-                    S[name1].E = toAdd;
-                }
-                if (S[name2].E.line.Equals(Colour.NONE))
-                {
-                    Node toAdd = new Node(S[name1], c, null);
-                    S[name2].E = toAdd;
-                }
-                else
-                {
-                    Node toAdd = new Node(S[name1], c, S[name2].E);
-                    S[name2].E = toAdd;
-                }
-
-                return true;
+                Node toAdd = new Node(S[name2], c, S[name1].E);
+                S[name1].E = toAdd;
+                toAdd = new Node(S[name1], c, S[name2].E);
+                S[name2].E = toAdd;
             }
-            Console.WriteLine("error");
-            return false;
+            return true;
         }
         /// <summary>
         /// Removes an edge that connects to two vertexes in an undirected graph.
