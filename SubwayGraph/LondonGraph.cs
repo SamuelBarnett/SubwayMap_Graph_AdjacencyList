@@ -94,7 +94,6 @@ namespace LondonGraph
                 Console.WriteLine("error");
                 return false;
             }
-
             // if there is no station of course there is going to be no other line with a different color
             // cases:
             // station 1 is empty and station 2 has stuff in it - 1
