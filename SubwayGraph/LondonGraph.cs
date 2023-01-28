@@ -94,16 +94,52 @@ namespace LondonGraph
                 Console.WriteLine("error");
                 return false;
             }
-            Node temp = S[name1].E;
-            if (S[name1].E.line.Equals(Colour.NONE))
+
+            // if there is no station of course there is going to be no other line with a different color
+            // cases:
+            // station 1 is empty and station 2 has stuff in it - 1
+            // station 2 is empty and station 1 has stuff in it - 2
+            // both stations are empty - 3
+            // both stations have stuff -- only one where you would have to check colors - 4
+            // switch to case statemnt later
+            // 3
+            if (S[name1].E.line.Equals(Colour.NONE) && S[name2].E.line.Equals(Colour.NONE))
             {
-                Node toAdd = new Node(S[name2], c, null);
-                S[name1].E = toAdd;
-                toAdd = new Node(S[name1], c, null);
+                Node toAdd = new Node(S[name1], c, null);
                 S[name2].E = toAdd;
+
+                toAdd = new Node(S[name2], c, null);
+                S[name1].E = toAdd;
+                return true;
             }
-            else
+            // 2
+            if (S[name1].E.line.Equals(Colour.NONE) && (!S[name2].E.line.Equals(Colour.NONE)))
             {
+                Node toAdd = new Node(S[name1], c, S[name2].E);
+                S[name2].E = toAdd;
+
+                toAdd = new Node(S[name2], c, null);
+                S[name1].E = toAdd;
+                return true;
+            }
+            // 1
+            if ((!S[name1].E.line.Equals(Colour.NONE)) && S[name2].E.line.Equals(Colour.NONE))
+            {
+
+                Node toAdd = new Node(S[name1], c, null);
+                S[name2].E = toAdd;
+                toAdd = new Node(S[name2], c, S[name1].E);
+                S[name1].E = toAdd;
+                return true;
+            }
+            // if name 1 is empty initialize new list in station 1
+            // search through station 2 to see if 
+            //4
+            if (!(S[name1].E.line.Equals(Colour.NONE) && S[name1].E.line.Equals(Colour.NONE)))
+            {
+                Node temp = S[name1].E;
+
+                // cant do this if name1 is null
                 while (temp.next != null)
                 {
                     // first find the connection, then find if any other colors match
@@ -114,24 +150,28 @@ namespace LondonGraph
                         // if connection with the same color exists
                         // loop through station 2 and check this
                         Node temp2 = S[name2].E;
-                        while (temp2.next != null)
+                        while (temp2 != null)
                         {
-                            if (temp2.line == c)
+                            if (temp2.connection.Equals(S[name1]))
                             {
-                                Console.WriteLine("station exists");
-                                return false;
+                                if (temp2.line == c)
+                                {
+                                    Console.WriteLine("station exists");
+                                    return false;
+                                }
                             }
                             temp2 = temp2.next;
                         }
                     }
                     temp = temp.next;
                 }
-                Node toAdd = new Node(S[name2], c, S[name1].E);
-                S[name1].E = toAdd;
-                toAdd = new Node(S[name1], c, S[name2].E);
+                Node toAdd = new Node(S[name1], c, S[name2].E);
                 S[name2].E = toAdd;
+                toAdd = new Node(S[name2], c, S[name1].E);
+                S[name1].E = toAdd;
+                return true;
             }
-            return true;
+            return false;
         }
         /// <summary>
         /// Removes an edge that connects to two vertexes in an undirected graph.
@@ -284,7 +324,48 @@ namespace LondonGraph
         /// <param name="name1"> string: the first name of the station(vertex) </param>
         /// <param name="name2"> string: the second name of the station(vertex) </param>
         /// <returns> void <returns>
-        public void ShortestRoute(string name1, string name2) { }
+        public void ShortestRoute(string name1, string name2)
+        {
+            // uses breath first to search. through
+            Station toAdd;
+            Queue<Station> Q = new Queue<Station>();
+            Q.Enqueue(S[name1]);
+            Node temp = S[name1].E;
+
+            while (Q.Count != 0)
+            {
+                S[name1].visited = true;
+                S[name1] = Q.Dequeue();
+
+                Console.WriteLine(S[name1].name);
+
+                while (temp.next != null)
+                {
+                    toAdd = temp.connection;
+                    //if not visited
+                    if (!toAdd.visited)
+                    {
+                        toAdd.visited = true;
+                        Q.Enqueue(toAdd);
+                    }
+                    temp = temp.next;
+                }
+            }
+
+
+        }
+
+        public int getCount(string name1)
+        {
+            int count = 0;
+            Node temp = S[name1].E;
+            while (temp.next != null)
+            {
+                count++;
+                temp = temp.next;
+            }
+            return count;
+        }
         public void PrintStations()
         {
             foreach (var station in S)
@@ -300,7 +381,7 @@ namespace LondonGraph
                 Node temp = station.Value.E;
                 while (temp != null && temp.connection != null)
                 {
-                    Console.WriteLine("[{0}]", temp.connection.name);
+                    Console.WriteLine("[{0}]({1})", temp.connection.name, temp.line);
                     temp = temp.next;
                 }
             }
