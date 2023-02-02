@@ -36,7 +36,7 @@ namespace Graph
 
             // Subway.ShortestRoute("Canada","Mexico");
             // Subway.RemoveConnection("Canada", "US", Colour.BLUE);
-            
+
             // Subway.RemoveStation("Mexico");
 
             // Subway.PrintGraph();
@@ -125,9 +125,21 @@ namespace Graph
             hamiltonSubway.InsertConnection("West Harbour", "Confederation", Colour.GREEN);
 
             // hamiltonSubway.RemoveStation("Rymal at Upper James");
-            hamiltonSubway.ShortestRoute("Ancaster","Rymal at Upper Sherman");
-            hamiltonSubway.ShortestRoute("Ancaster","Rymal at Upper Sherman");
-            hamiltonSubway.ShortestRoute("Ancaster","Rymal at Upper Sherman");
+            hamiltonSubway.ShortestRoute("Ancaster", "Main at GO");
+            //`````````````````````````````````````````````````````````````````````````````````````````````````````````````
+            // SubwayMap subwayMap = new SubwayMap();
+            // subwayMap.InsertStation("First_Station");
+            // subwayMap.InsertStation("Second_Station");
+            // subwayMap.InsertConnection("First_Station", "Second_Station", Colour.RED);
+            // // shows the first station can traverse to the second and second can traverse to the first
+            // bool result_1 = subwayMap.ShortestRoute("First_Station", "Second_Station");
+
+            // result_1 = subwayMap.ShortestRoute("Second_Station", "First_Station");
+
+            // System.Console.WriteLine(result_1);
+            //`````````````````````````````````````````````````````````````````````````````````````````````````````````````
+            // hamiltonSubway.ShortestRoute("Ancaster","Rymal at Upper Sherman");
+            // hamiltonSubway.ShortestRoute("Ancaster","Rymal at Upper Sherman");
 
             hamiltonSubway.PrintGraph();
             Console.ReadLine();

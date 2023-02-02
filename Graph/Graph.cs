@@ -62,16 +62,18 @@ namespace Graph
         /// </summary>
         /// <param name="name"> string: the name of the station(vertex) </param>
         /// <returns> void <returns>
-        public void InsertStation(string name)
+        public bool InsertStation(string name)
         {
             if (!S.ContainsKey(name))
             {
                 Station addStation = new Station(name);
                 S.Add(name, addStation);
+                return true;
             }
             else
             {
                 Console.WriteLine("Station with the same name already exists");
+                return false;
             }
         }
         /// <summary>
@@ -359,6 +361,11 @@ namespace Graph
                 Console.WriteLine("Station does not exist");
                 return false;
             }
+            if (S[name1].Equals(S[name2]))
+            {
+                Console.WriteLine("Stations are the same.");
+                return false;
+            }
 
             // initializing values
             Station toAdd = S[name1];
@@ -410,6 +417,7 @@ namespace Graph
             foreach (var station in S)
             {
                 station.Value.visited = false;
+                station.Value.Parent = null;
             }
             return true;
         }
