@@ -120,34 +120,13 @@ namespace LondonGraph
                 Console.WriteLine("One or both stations do not exist.");
                 return false;
             }
-            // if there is no station of course there is going to be no other line with a different color
+            // switch statement not used as values are not constants
             // cases:
             // station 1 is empty and station 2 has stuff in it - 1
             // station 2 is empty and station 1 has stuff in it - 2
             // both stations are empty - 3
             // both stations have stuff -- only one where you would have to check colors - 4
-            // switch to case statement later
-            // 3
-            if (S[name1].E.line.Equals(Colour.NONE) && S[name2].E.line.Equals(Colour.NONE))
-            {
-                Node toAdd = new Node(S[name1], c, null);
-                S[name2].E = toAdd;
-
-                toAdd = new Node(S[name2], c, null);
-                S[name1].E = toAdd;
-                return true;
-            }
-            // 2
-            if (S[name1].E.line.Equals(Colour.NONE) && (!S[name2].E.line.Equals(Colour.NONE)))
-            {
-                Node toAdd = new Node(S[name1], c, S[name2].E);
-                S[name2].E = toAdd;
-
-                toAdd = new Node(S[name2], c, null);
-                S[name1].E = toAdd;
-                return true;
-            }
-            // 1
+            //case 1
             if ((!S[name1].E.line.Equals(Colour.NONE)) && S[name2].E.line.Equals(Colour.NONE))
             {
 
@@ -157,8 +136,26 @@ namespace LondonGraph
                 S[name1].E = toAdd;
                 return true;
             }
-            // if name 1 is empty initialize new list in station 1
-            // search through station 2 to see if 
+             // case 2
+            if (S[name1].E.line.Equals(Colour.NONE) && (!S[name2].E.line.Equals(Colour.NONE)))
+            {
+                Node toAdd = new Node(S[name1], c, S[name2].E);
+                S[name2].E = toAdd;
+
+                toAdd = new Node(S[name2], c, null);
+                S[name1].E = toAdd;
+                return true;
+            }
+            // case 3
+            if (S[name1].E.line.Equals(Colour.NONE) && S[name2].E.line.Equals(Colour.NONE))
+            {
+                Node toAdd = new Node(S[name1], c, null);
+                S[name2].E = toAdd;
+
+                toAdd = new Node(S[name2], c, null);
+                S[name1].E = toAdd;
+                return true;
+            }
             //4
             if (!(S[name1].E.line.Equals(Colour.NONE) && S[name1].E.line.Equals(Colour.NONE)))
             {
@@ -357,12 +354,13 @@ namespace LondonGraph
 
         public bool ShortestRoute(string name1, string name2)
         {
+            // check if stations exist
             if (!(S.ContainsKey(name1) && S.ContainsKey(name2)))
             {
                 Console.WriteLine("Station does not exist");
                 return false;
             }
-            //
+            // initializing values
             Station toAdd = S[name1];
             Station Parent;
             Node stationNode;
@@ -374,13 +372,11 @@ namespace LondonGraph
             // dequeue back to dictionary at worst case
             while (Q.Count != 0)
             {
-                // pops the head off the queue
+                // pops the head off the queue.
                 Parent = toAdd = Q.Dequeue();
                 // store value of head to not reference original node.
                 stationNode = toAdd.E;
-                // writes the station name to console
-                Console.WriteLine(toAdd.name);
-                // loops through stations nodes
+                // loops through queued stations nodes.
                 while (stationNode != null)
                 {
                     // prepares to add stations first connection to queue
@@ -390,9 +386,11 @@ namespace LondonGraph
                     {
                         // adds new station to the queue that is in the
                         toAdd.visited = true;
+                        // assigns the node that was dequeued as the parent.
                         toAdd.Parent = Parent;
+                        // adds the new child node to queue
                         Q.Enqueue(toAdd);
-
+                        // if we found the destination station(name2), clear the queue so it doesn't continue and break.
                         if (toAdd == S[name2])
                         {
                             Q.Clear();
@@ -402,11 +400,12 @@ namespace LondonGraph
                     stationNode = stationNode.next;
                 }
             }
+            // + "({0})", toAdd.E.line
+
+            // tracks back along parent to write out the names of the shortest path
             while (toAdd != null)
             {
-                System.Console.WriteLine(toAdd.name);
-                if (toAdd == S[name2])
-                    break;
+                Console.WriteLine(toAdd.name + "->");
                 toAdd = toAdd.Parent;
             }
             return true;
