@@ -12,7 +12,8 @@ namespace LondonGraph
     /// </summary>
     /// <param name=""> </param>
     /// <returns> <returns>
-    public enum Colour { RED, YELLOW, GREEN, BLUE, NONE } // For example
+    public enum Colour { RED, YELLOW, GREEN, BLUE, ORANGE, WHITE, NONE } // For example
+
     public class SubwayMap
     {
         private class Node
@@ -41,11 +42,13 @@ namespace LondonGraph
             public string name; // Name of the subway station
             public bool visited; // Used for the breadth-first search
             public Node E; // Header node for a linked list of adjacent stations
+            public Station Parent;
             public Station(string name)
             {
                 this.name = name;
                 this.E = new Node();
                 this.visited = false;
+                this.Parent = null;
             }
         }
         private Dictionary<string, Station> S; // Dictionary of stations
@@ -77,31 +80,30 @@ namespace LondonGraph
         /// <param name="name"> string: the name of the station(vertex) </param>
         /// <returns> true or false <returns>
         // algorithm 
-
-        // remove vertex
-        // remove edges then remove vertex
-
-        // ideas: loop through stations connections and then call removeConnection() on every one
         public bool RemoveStation(string name)
         {
-            if (!S.ContainsKey(name))
+            //check to see if station ectually exists
+            if (!(S.ContainsKey(name)))
             {
-                Console.WriteLine("station does not exist");
+                Console.WriteLine("One or both stations do not exist.");
                 return false;
             }
-            // add names and colors to a list and then call remove connection
 
+            //loop through every connection the station has and remove them
             Node temp = S[name].E;
-            while (temp != null && temp.connection != null)
+
+            while (temp != null)
             {
-                // add names and colors to a list and then call remove connection
+                //this uses the name, the name of the connection of temp, and the line colour of temp all at the header
+                //I previosuly used temp.connection.line, but I ran into an error where if the connections line is different, then it would loop infinitely
                 RemoveConnection(name, temp.connection.name, temp.line);
-                // Console.WriteLine("[{0}]({1})", temp.connection.name, temp.line);
-                temp = temp.next;
+                temp = S[name].E;
             }
 
+            //remove the station from the dictionary
             S.Remove(name);
-            return false;
+
+            return true;
         }
 
         /// <summary>
@@ -163,10 +165,10 @@ namespace LondonGraph
                 Node temp = S[name1].E;
 
                 // cant do this if name1 is null
-                while (temp.next != null)
+                while (temp != null)
                 {
                     // first find the connection, then find if any other colors match
-                    if (temp.next.connection.Equals(S[name2]))
+                    if (temp.connection.Equals(S[name2]))
                     {
                         // temp.next == station 2
                         // find if that connection that does exist is unique
@@ -237,9 +239,14 @@ namespace LondonGraph
             }
             Node c_2_location = S[name2].E;
             temp = S[name2].E; //temp value for the header of the list containing station 2
-            while (temp.next != null)
+            //has to be temp != null, not temp.next, since it won't work if there's only one node in the header, or the node we want is at the end of the list
+            while (temp != null)
             {
-                if (temp.next.connection.Equals(S[name1])) //checks to see if connection between exists, if so where 
+                /*had a problem here where when I did temp.next.connection it wouldn't remove it, in the case we were testing the connection towards
+                mexico and the us, where mexico was the second connection in the list, since it started as temp.next it would check the second item instead of the first,
+                and because we store c_2_location as temp, c_2_location was storing the first item in the list (in this case Canada) so it would delete
+                Canada from the list but not Mexico.*/
+                if (temp.connection.Equals(S[name1])) //checks to see if connection between exists, if so where 
                 {
                     s_2_exists = true;
                     //check to see if colours match
@@ -289,7 +296,7 @@ namespace LondonGraph
                 }
 
                 //check to see if it's at the end of the list
-                if (temp.next.next.Equals(null))
+                if (temp.next.next == null)
                 {
                     temp.next = null; //makes pointer to connection we want to delete is null
                 }
@@ -304,14 +311,13 @@ namespace LondonGraph
             //check to see if the node is found at the head (for the second station!!!!!!!!!)
             if (S[name2].E.Equals(c_2_location))
             {
-                if (S[name2].E.next.Equals(null)) //check to see if it's the only element in the linked list
+                if (S[name2].E.next == null) //check to see if it's the only element in the linked list
                 {
                     S[name2].E = null;//set header to null
                     return true;
                 }
                 else //more than one item in the list
                 {
-                    // something here is wrong
                     //create temp node, make header equal to next node 
                     temp = S[name2].E.next;
                     S[name2].E = temp;
@@ -328,7 +334,7 @@ namespace LondonGraph
                 }
 
                 //check to see if it's at the end of the list
-                if (temp.next.next.Equals(null))
+                if (temp.next.next == null)
                 {
                     temp.next = null; //makes pointer to connection we want to delete is null
                     return true;
@@ -348,47 +354,62 @@ namespace LondonGraph
         /// <param name="name1"> string: the first name of the station(vertex) </param>
         /// <param name="name2"> string: the second name of the station(vertex) </param>
         /// <returns> void <returns>
-        public void ShortestRoute(string name1, string name2)
-        {
-            // uses breath first to search. through
-            Station toAdd;
-            Queue<Station> Q = new Queue<Station>();
-            Q.Enqueue(S[name1]);
-            Node temp = S[name1].E;
 
+        public bool ShortestRoute(string name1, string name2)
+        {
+            if (!(S.ContainsKey(name1) && S.ContainsKey(name2)))
+            {
+                Console.WriteLine("Station does not exist");
+                return false;
+            }
+            //
+            Station toAdd = S[name1];
+            Station Parent;
+            Node stationNode;
+            //making new queue
+            Queue<Station> Q = new Queue<Station>();
+            Q.Enqueue(toAdd);
+            // temporary station, temporary node.
+            toAdd.visited = true;
+            // dequeue back to dictionary at worst case
             while (Q.Count != 0)
             {
-                S[name1].visited = true;
-                S[name1] = Q.Dequeue();
-
-                Console.WriteLine(S[name1].name);
-
-                while (temp.next != null)
+                // pops the head off the queue
+                Parent = toAdd = Q.Dequeue();
+                // store value of head to not reference original node.
+                stationNode = toAdd.E;
+                // writes the station name to console
+                Console.WriteLine(toAdd.name);
+                // loops through stations nodes
+                while (stationNode != null)
                 {
-                    toAdd = temp.connection;
-                    //if not visited
+                    // prepares to add stations first connection to queue
+                    toAdd = stationNode.connection;
+                    // only allows to be added to queue if not visited
                     if (!toAdd.visited)
                     {
+                        // adds new station to the queue that is in the
                         toAdd.visited = true;
+                        toAdd.Parent = Parent;
                         Q.Enqueue(toAdd);
+
+                        if (toAdd == S[name2])
+                        {
+                            Q.Clear();
+                            break;
+                        }
                     }
-                    temp = temp.next;
+                    stationNode = stationNode.next;
                 }
             }
-
-
-        }
-
-        public int getCount(string name1)
-        {
-            int count = 0;
-            Node temp = S[name1].E;
-            while (temp.next != null)
+            while (toAdd != null)
             {
-                count++;
-                temp = temp.next;
+                System.Console.WriteLine(toAdd.name);
+                if (toAdd == S[name2])
+                    break;
+                toAdd = toAdd.Parent;
             }
-            return count;
+            return true;
         }
         public void PrintStations()
         {
@@ -410,6 +431,8 @@ namespace LondonGraph
                 }
             }
         }
+
+
     }
 }
 
