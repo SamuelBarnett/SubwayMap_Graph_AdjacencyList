@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LondonGraph
+namespace Graph
 {
     class SubwayGraph
     {
@@ -124,7 +124,7 @@ namespace LondonGraph
             hamiltonSubway.InsertConnection("Aldershot", "West Harbour", Colour.GREEN);
             hamiltonSubway.InsertConnection("West Harbour", "Confederation", Colour.GREEN);
 
-            // Subway.RemoveStation("Mexico");
+            // hamiltonSubway.RemoveStation("Rymal at Upper James");
             hamiltonSubway.ShortestRoute("Ancaster","Rymal at Upper Sherman");
 
             // hamiltonSubway.PrintGraph();
