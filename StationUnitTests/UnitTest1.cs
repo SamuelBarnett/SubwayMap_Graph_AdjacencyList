@@ -9,9 +9,12 @@ public class Test_InsertConnection
     public void TestInsertConnection_BaseCase_CorrectInput()
     {
         SubwayMap subwayMap = new SubwayMap();
+        bool expected = true;
+
+
         subwayMap.InsertStation("A");
         subwayMap.InsertStation("B");
-        bool expected = true;
+        
         // calculates result
         bool result = subwayMap.InsertConnection("A", "B", Colour.RED);
         

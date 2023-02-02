@@ -126,8 +126,10 @@ namespace Graph
 
             // hamiltonSubway.RemoveStation("Rymal at Upper James");
             hamiltonSubway.ShortestRoute("Ancaster","Rymal at Upper Sherman");
+            hamiltonSubway.ShortestRoute("Ancaster","Rymal at Upper Sherman");
+            hamiltonSubway.ShortestRoute("Ancaster","Rymal at Upper Sherman");
 
-            // hamiltonSubway.PrintGraph();
+            hamiltonSubway.PrintGraph();
             Console.ReadLine();
         }
     }

@@ -136,7 +136,7 @@ namespace Graph
                 S[name1].E = toAdd;
                 return true;
             }
-             // case 2
+            // case 2
             if (S[name1].E.line.Equals(Colour.NONE) && (!S[name2].E.line.Equals(Colour.NONE)))
             {
                 Node toAdd = new Node(S[name1], c, S[name2].E);
@@ -359,6 +359,7 @@ namespace Graph
                 Console.WriteLine("Station does not exist");
                 return false;
             }
+
             // initializing values
             Station toAdd = S[name1];
             Station Parent;
@@ -404,6 +405,11 @@ namespace Graph
             {
                 Console.WriteLine(toAdd.name + "->");
                 toAdd = toAdd.Parent;
+            }
+            // Reset visited to false.
+            foreach (var station in S)
+            {
+                station.Value.visited = false;
             }
             return true;
         }
