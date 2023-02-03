@@ -6,12 +6,6 @@ using System.Threading.Tasks;
 
 namespace Graph
 {
-    /// Copy and paste this for comments:
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name=""> </param>
-    /// <returns> <returns>
     public enum Colour { RED, YELLOW, GREEN, BLUE, ORANGE, WHITE, NONE } // For example
 
     public class SubwayMap
@@ -81,16 +75,20 @@ namespace Graph
         /// </summary>
         /// <param name="name"> string: the name of the station(vertex) </param>
         /// <returns> true or false <returns>
-        // algorithm 
         public bool RemoveStation(string name)
         {
             //check to see if station ectually exists
             if (!(S.ContainsKey(name)))
             {
-                Console.WriteLine("One or both stations do not exist.");
+                Console.WriteLine("Stations does not exist.");
                 return false;
             }
-
+            //check to see if station has any connections
+            if (S[name].E.connection == null)
+            {
+                S.Remove(name);
+                return true;
+            }
             //loop through every connection the station has and remove them
             Node temp = S[name].E;
 
@@ -206,9 +204,16 @@ namespace Graph
         /// <returns> true or false <returns>
         public bool RemoveConnection(string name1, string name2, Colour c)
         {
-            if (!(S.ContainsKey(name1) && S.ContainsKey(name2)))
+            if (!(S.ContainsKey(name1) && S.ContainsKey(name2))) //checl to see whether the name station is in the dictionary
             {
                 Console.WriteLine("Station does not exist");
+                return false;
+            }
+
+            //check to see whether there are any connections at all
+            if (S[name1].E.connection == null || S[name2].E.connection == null)
+            {
+                Console.WriteLine("No connections found");
                 return false;
             }
             Node c_1_location = S[name1].E;
@@ -361,12 +366,14 @@ namespace Graph
                 Console.WriteLine("Station does not exist");
                 return false;
             }
+            // Check if stations are the same.
             if (S[name1].Equals(S[name2]))
             {
                 Console.WriteLine("Stations are the same.");
                 return false;
             }
-
+            // bool to check if the stations are connected.
+            bool found = false;
             // initializing values
             Station toAdd = S[name1];
             Station Parent;
@@ -376,10 +383,10 @@ namespace Graph
             Q.Enqueue(toAdd);
             // temporary station, temporary node.
             toAdd.visited = true;
-            // dequeue back to dictionary at worst case
+
             while (Q.Count != 0)
             {
-                // pops the head off the queue.
+                // pops the head off the queue and assigns parent.
                 Parent = toAdd = Q.Dequeue();
                 // store value of head to not reference original node.
                 stationNode = toAdd.E;
@@ -400,6 +407,7 @@ namespace Graph
                         // if we found the destination station(name2), clear the queue so it doesn't continue and break.
                         if (toAdd == S[name2])
                         {
+                            found = true;
                             Q.Clear();
                             break;
                         }
@@ -413,14 +421,20 @@ namespace Graph
                 Console.WriteLine(toAdd.name + "->");
                 toAdd = toAdd.Parent;
             }
-            // Reset visited to false.
+            //Reset visited to false.
             foreach (var station in S)
             {
                 station.Value.visited = false;
                 station.Value.Parent = null;
             }
+            // If the station was never found return false.
+            if (found == false)
+            {
+                return false;
+            }
             return true;
         }
+        // prints only the stations
         public void PrintStations()
         {
             foreach (var station in S)
@@ -428,6 +442,7 @@ namespace Graph
                 Console.WriteLine("name: {0}", station.Value.name);
             }
         }
+        // prints stations and connections
         public void PrintGraph()
         {
             foreach (var station in S)
@@ -441,8 +456,6 @@ namespace Graph
                 }
             }
         }
-
-
     }
 }
 

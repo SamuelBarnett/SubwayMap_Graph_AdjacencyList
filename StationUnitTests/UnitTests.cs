@@ -70,6 +70,14 @@ public class Test_InsertConnection
 public class Test_InsertStation
 {
     [TestMethod]
+    public void TestInsertStation_Valid_Station()
+    {
+        SubwayMap subwayMap = new SubwayMap();
+        // calculates result
+        bool result = subwayMap.InsertStation("First_Station");
+        Assert.IsTrue(result);
+    }
+    [TestMethod]
     public void TestInsertStation_StationExists()
     {
         SubwayMap subwayMap = new SubwayMap();
@@ -110,6 +118,8 @@ public class Test_RemoveConnection
         bool result = subwayMap.RemoveConnection("First_Station", "Second_Station", Colour.YELLOW);
         Assert.IsFalse(result);
     }
+    [TestMethod]
+
     public void TestRemoveConnection_Nonexistent_Connection()
     {
         // insert connection first
@@ -120,14 +130,56 @@ public class Test_RemoveConnection
         bool result = subwayMap.RemoveConnection("First_Station", "Second_Station", Colour.YELLOW);
         Assert.IsFalse(result);
     }
+    [TestMethod]
+
+    public void TestRemoveConnection_Nonexistent_Station()
+    {
+        // insert connection first
+        SubwayMap subwayMap = new SubwayMap();
+        subwayMap.InsertStation("First_Station");
+        // calculates result
+        bool result = subwayMap.RemoveConnection("First_Station", "Second_Station", Colour.YELLOW);
+        Assert.IsFalse(result);
+    }
 }
 
 [TestClass]
 public class Test_RemoveStation
 {
     [TestMethod]
-    public void TestRemoveStation()
+    public void TestRemoveStation_StationRemoved()
     {
+        SubwayMap subwayMap = new SubwayMap();
+        subwayMap.InsertStation("First_Station");
+        // calculates result
+        bool result = subwayMap.RemoveStation("First_Station");
+        Assert.IsTrue(result);
+    }
+    public void TestRemoveStation_Station_Does_Not_Exist()
+    {
+        SubwayMap subwayMap = new SubwayMap();
+        // calculates result
+        bool result = subwayMap.RemoveStation("First_Station");
+        Assert.IsFalse(result);
+    }
+    [TestMethod]
+    public void TestRemoveStation_ConnectionsRemoved()
+    {
+        // make a station 
+        // make a connection
+        // remove one station
+        // if remove connection returns false then there is no connection and the connections were already removed by remove station.
+        SubwayMap subwayMap = new SubwayMap();
+        subwayMap.InsertStation("First_Station");
+        subwayMap.InsertStation("Second_Station");
+
+        subwayMap.InsertConnection("First_Station", "Second_Station", Colour.RED);
+
+        subwayMap.RemoveStation("First_Station");
+        // make sure both stations still exist.
+        subwayMap.InsertStation("First_Station");
+        bool result = subwayMap.RemoveConnection("First_Station", "Second_Station", Colour.RED);
+        Assert.IsFalse(result);
     }
 }
 
@@ -135,7 +187,17 @@ public class Test_RemoveStation
 public class Test_ShortestRoute
 {
     [TestMethod]
-    public void TestShortestRoute()
+    public void TestShortestRoute_SameStation()
+    {
+
+    }
+    [TestMethod]
+    public void TestShortestRoute_Station_NonExistent()
+    {
+
+    }
+    [TestMethod]
+    public void TestShortestRoute_Stations_Not_connected()
     {
 
     }
