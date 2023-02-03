@@ -187,18 +187,67 @@ public class Test_RemoveStation
 public class Test_ShortestRoute
 {
     [TestMethod]
+    public void TestShortestRoute_ValidPath()
+    {
+        SubwayMap subwayMap = new SubwayMap();
+
+        subwayMap.InsertStation("1");
+        subwayMap.InsertStation("2");
+        subwayMap.InsertStation("3");
+        subwayMap.InsertStation("4");
+        subwayMap.InsertStation("5");
+
+        subwayMap.InsertConnection("1", "2", Colour.RED);
+        subwayMap.InsertConnection("2", "3", Colour.RED);
+        subwayMap.InsertConnection("3", "4", Colour.RED);
+        subwayMap.InsertConnection("4", "5", Colour.RED);
+
+        bool result = subwayMap.ShortestRoute("1", "5");
+        Assert.IsTrue(result);
+
+    }
+    [TestMethod]
     public void TestShortestRoute_SameStation()
     {
+        SubwayMap subwayMap = new SubwayMap();
 
+        subwayMap.InsertStation("1");
+        subwayMap.InsertStation("2");
+        subwayMap.InsertConnection("1", "2", Colour.RED);
+
+        bool result = subwayMap.ShortestRoute("1", "1");
+
+        Assert.IsFalse(result);
     }
     [TestMethod]
     public void TestShortestRoute_Station_NonExistent()
     {
+        SubwayMap subwayMap = new SubwayMap();
 
+        subwayMap.InsertStation("1");
+        subwayMap.InsertStation("2");
+        subwayMap.InsertConnection("1", "2", Colour.RED);
+
+        bool result = subwayMap.ShortestRoute("1", "3");
+
+        Assert.IsFalse(result);
     }
     [TestMethod]
     public void TestShortestRoute_Stations_Not_connected()
     {
+        SubwayMap subwayMap = new SubwayMap();
 
+        subwayMap.InsertStation("1");
+        subwayMap.InsertStation("2");
+        subwayMap.InsertStation("3");
+        subwayMap.InsertStation("4");
+        subwayMap.InsertStation("5");
+        // 2 and 3 not connected so 1 and 5 are not
+        subwayMap.InsertConnection("1", "2", Colour.RED);
+        subwayMap.InsertConnection("3", "4", Colour.RED);
+        subwayMap.InsertConnection("4", "5", Colour.RED);
+
+        bool result = subwayMap.ShortestRoute("1", "5");
+        Assert.IsFalse(result);
     }
 }
