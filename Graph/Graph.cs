@@ -97,6 +97,11 @@ namespace Graph
                 //this uses the name, the name of the connection of temp, and the line colour of temp all at the header
                 //I previosuly used temp.connection.line, but I ran into an error where if the connections line is different, then it would loop infinitely
                 RemoveConnection(name, temp.connection.name, temp.line);
+                // if list is empty break
+                if (S[name].E.connection == null)
+                {
+                   break;
+                }
                 temp = S[name].E;
             }
 
@@ -204,7 +209,7 @@ namespace Graph
         /// <returns> true or false <returns>
         public bool RemoveConnection(string name1, string name2, Colour c)
         {
-            if (!(S.ContainsKey(name1) && S.ContainsKey(name2))) //checl to see whether the name station is in the dictionary
+            if (!(S.ContainsKey(name1) && S.ContainsKey(name2))) //check to see whether the name station is in the dictionary
             {
                 Console.WriteLine("Station does not exist");
                 return false;
@@ -281,7 +286,9 @@ namespace Graph
             {
                 if (S[name1].E.next == null) //check to see if it's the only element in the linked list
                 {
-                    S[name1].E = null;//set header to null
+                    //had an error here, can't set E itself to null, since it creates some errors for insert connection
+                    S[name1].E.line = Colour.NONE;
+                    S[name1].E.connection = null;
                 }
                 else //more than one item in the list
                 {
@@ -317,7 +324,8 @@ namespace Graph
             {
                 if (S[name2].E.next == null) //check to see if it's the only element in the linked list
                 {
-                    S[name2].E = null;//set header to null
+                    S[name2].E.line = Colour.NONE;
+                    S[name2].E.connection = null;
                     return true;
                 }
                 else //more than one item in the list

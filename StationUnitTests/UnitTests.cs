@@ -12,7 +12,29 @@ public class Test_InsertConnection
         subwayMap.InsertStation("Second_Station");
         // calculates result
         bool result = subwayMap.InsertConnection("First_Station", "Second_Station", Colour.RED);
+
         Assert.IsTrue(result);
+    }
+    [TestMethod]
+    public void TestInsertConnection_Empty_or_Vacant()
+    {
+        SubwayMap subwayMap = new SubwayMap();
+        subwayMap.InsertStation("First_Station");
+        subwayMap.InsertStation("Second_Station");
+        subwayMap.InsertStation("Third_Station");
+        subwayMap.InsertStation("Fourth_Station");
+
+        // calculates result
+        bool result_1 = subwayMap.InsertConnection("First_Station", "Second_Station", Colour.RED); // both empty
+        bool result_2 = subwayMap.InsertConnection("First_Station", "Third_Station", Colour.RED); // Second empty
+        bool result_3 = subwayMap.InsertConnection("Fourth_Station", "Second_Station", Colour.RED); // both vacant
+        bool result_4 = subwayMap.InsertConnection("Fourth_Station", "First_Station", Colour.RED); // first empty
+
+        Assert.IsTrue(result_1);
+        Assert.IsTrue(result_2);
+        Assert.IsTrue(result_3);
+        Assert.IsTrue(result_4);
+
     }
     [TestMethod]
     public void TestInsertConnection_SameStation_DifferentColor()
@@ -92,7 +114,7 @@ public class Test_InsertStation
 public class Test_RemoveConnection
 {
     [TestMethod]
-    public void TestRemoveConnection_ConnectionExists_CorrectWeight()
+    public void TestRemoveConnection_ConnectionExists_CorrectInput()
     {
         // insert connection first
         SubwayMap subwayMap = new SubwayMap();
@@ -140,6 +162,22 @@ public class Test_RemoveConnection
         // calculates result
         bool result = subwayMap.RemoveConnection("First_Station", "Second_Station", Colour.YELLOW);
         Assert.IsFalse(result);
+    }
+    [TestMethod]
+    public void TestRemoveConnection_ReinsertConnection()
+    {
+        // checks if you can reinsert the connection, confirms its completely gone.
+        // insert connection first
+        SubwayMap subwayMap = new SubwayMap();
+        subwayMap.InsertStation("First_Station");
+        subwayMap.InsertStation("Second_Station");
+        subwayMap.InsertConnection("First_Station", "Second_Station", Colour.YELLOW);
+        // calculates result
+        subwayMap.RemoveConnection("First_Station", "Second_Station", Colour.YELLOW);
+
+        bool result = subwayMap.InsertConnection("First_Station", "Second_Station", Colour.YELLOW);
+
+        Assert.IsTrue(result);
     }
 }
 
@@ -204,7 +242,6 @@ public class Test_ShortestRoute
 
         bool result = subwayMap.ShortestRoute("1", "5");
         Assert.IsTrue(result);
-
     }
     [TestMethod]
     public void TestShortestRoute_SameStation()
