@@ -24,6 +24,7 @@ namespace Graph
             hamiltonSubway.InsertStation("Elfrida");
             //Blue line connections
             hamiltonSubway.InsertConnection("Ancaster", "Garner Rd E", Colour.BLUE);
+            hamiltonSubway.InsertConnection("Ancaster", "Garner Rd E", Colour.BLUE);
             hamiltonSubway.InsertConnection("Garner Rd E", "Rymal at Garth", Colour.BLUE);
             hamiltonSubway.InsertConnection("Rymal at Garth", "Rymal at Upper James", Colour.BLUE);
             hamiltonSubway.InsertConnection("Rymal at Upper James", "Rymal at Upper Wellington", Colour.BLUE);
@@ -95,7 +96,7 @@ namespace Graph
             hamiltonSubway.InsertConnection("West Harbour", "Confederation", Colour.GREEN);
 
             hamiltonSubway.ShortestRoute("Rymal at Upper James", "Upper Centennial at Queenston");
-            // hamiltonSubway.PrintGraph();
+            hamiltonSubway.PrintGraph();
             Console.ReadLine();
         }
     }

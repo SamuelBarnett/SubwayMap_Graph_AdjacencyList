@@ -22,7 +22,7 @@ namespace Graph
                 this.connection = null;
                 this.line = Colour.NONE;
             }
-            // maybe switch the properies to have {get; set;} and use that value instead.
+            // maybe switch the properties to have {get; set;} and use that value instead.
             public Node(Station connection, Colour c, Node next)
             {
                 this.connection = connection;
@@ -77,7 +77,7 @@ namespace Graph
         /// <returns> true or false <returns>
         public bool RemoveStation(string name)
         {
-            //check to see if station ectually exists
+            //check to see if station actually exists
             if (!(S.ContainsKey(name)))
             {
                 Console.WriteLine("Stations does not exist.");
@@ -95,7 +95,7 @@ namespace Graph
             while (temp != null)
             {
                 //this uses the name, the name of the connection of temp, and the line colour of temp all at the header
-                //I previosuly used temp.connection.line, but I ran into an error where if the connections line is different, then it would loop infinitely
+                //I previously used temp.connection.line, but I ran into an error where if the connections line is different, then it would loop infinitely
                 RemoveConnection(name, temp.connection.name, temp.line);
                 // if list is empty break
                 if (S[name].E.connection == null)
@@ -183,7 +183,7 @@ namespace Graph
                             {
                                 if (temp2.line == c)
                                 {
-                                    Console.WriteLine("station exists");
+                                    Console.WriteLine("connection exists");
                                     return false;
                                 }
                             }
